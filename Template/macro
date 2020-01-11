@@ -1,3 +1,5 @@
+#define _GLIBCXX_DEBUG
+#define _LIBCPP_DEBUG 0
 #define REP(i, n) for (int i = 0; i < (int)(n); i++)
 #define REP2(i, s, n) for (int i = (s); i < (int)(n); i++)
 #define REPR(i,n) for(int i=n;i>=0;i--)
@@ -7,7 +9,52 @@ template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } retu
 template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
 typedef long long ll;
 
+
+
+// 可能な限り2で割る
+int f(int x) {
+  int res = 0;
+  while (x % 2 == 0) {
+    x /= 2;
+    res++;
+  }
+  return res;
+}
+
+int gcd(int a, int b){return b?gcd(b,a%b): a;}
+int lcm(int a, int b){return a/gcd(a,b) * b}
+int lcm_n(vector<int> &numbers){
+  int l;
+  l = numbers[0];
+  for (int i = 1; i < numbers.size(); i++) {
+    l = lcm(l, numbers[i]);
+  }
+  return l;
+}
+
+ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a; }
+ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
+
+/* 
+  これがlong longの範囲を超えることは十分にあるので
+  if(l > hoge){cout << 0 << endl; return 0;}
+  みたいな条件を途中に挟む
+*/
+
+ll lcm_n(vector<ll> &numbers) {
+  ll l;
+  l = numbers.at(0);
+  for (int i = 1; i < numbers.size(); i++) {
+    l = lcm(l, numbers[i]);
+  }
+  return l;
+}
+
+int ceil(int x){return (x+1)/2;}
+int floor(int x){return (x-1)/2;}
+
 順に
+デバッグ用
 for文(0~N-1)
 範囲for文(s~N-1)
 逆for文
@@ -17,3 +64,12 @@ memset、配列の0パディング
 chmax(a,b) == if(a<b) a=b;
 chmax(a,b+c) == if(a>b+c) a=b+c;
 long long (書かなくても分かるでしょ？)
+
+
+
+x以下の奇数を求めるものは
+例えば 1, 2, 3, 4, 5 の場合
+1, 3, 5 が奇数
+これは5を2で割ったものを切り上げれば良い、実装としては
+(x+1)/2
+となる。これは偶数ならx/2、奇数ならx/2+1を返す
