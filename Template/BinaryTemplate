@@ -1,6 +1,34 @@
 
 二部探索セット
 
+実際はstd::lower_boundなどで事足りる
+それぞれ、4以上の数値、4より大きい数値を返す
+lower_bound(v.begin(), v.end(), 4);  
+upper_bound(v.begin(), v.end(), a)
+
+内部的な動作についてだが、例えば{0,1,2,2,3,5}の時は
+lower_boundは1と2の間の区間、つまり2
+upper_boundは2と3の間の区間、つまり4
+をそれぞれ返す。
+
+
+
+実装例
+
+
+int binary_search(int right, int left, int key){
+
+    while(abs(left - right) > 1){
+        int mid =  left + (right-left) / 2;
+
+        if(key>mid) left = mid;
+        else right = mid;
+    }
+
+    return right;
+}
+
+
 vector<int> a={} (vectorは当然ながらソート済み）をグローバル宣言して使う
 /*
 
@@ -55,23 +83,4 @@ int main() {
 
     /* ズバリ当てる！ */
     cout << "The age is " << left << "!" << endl;
-}
-
-
-
-
-
-実装例
-
-
-int binary_search(int right, int left, int key){
-
-    while(abs(left - right) > 1){
-        int mid =  left + (right-left) / 2;
-
-        if(key>mid) left = mid;
-        else right = mid;
-    }
-
-    return right;
 }
