@@ -35,12 +35,6 @@ int lcm_n(vector<int> &numbers){
 ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a; }
 ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
 
-/* 
-  これがlong longの範囲を超えることは十分にあるので
-  if(l > hoge){cout << 0 << endl; return 0;}
-  みたいな条件を途中に挟む
-*/
-
 ll lcm_n(vector<ll> &numbers) {
   ll l;
   l = numbers.at(0);
@@ -48,6 +42,22 @@ ll lcm_n(vector<ll> &numbers) {
     l = lcm(l, numbers[i]);
   }
   return l;
+}
+/* 
+  これがlong longの範囲を超えることは十分にあるので
+  if(l > hoge){cout << 0 << endl; return 0;}
+  みたいな条件を途中に挟む
+*/
+
+
+
+ll binary(ll bin) {
+  ll ans = 0;
+  for (int i = 0; bin > 0; i++) {
+    ans = ans + (bin % 2) * pow(10, i);
+    bin = bin / 2;
+  }
+  return ans;
 }
 
 int ceil(int x){return (x+1)/2;}
