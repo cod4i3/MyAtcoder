@@ -1,0 +1,6 @@
+s = input()
+f, b = int(s[:2]), int(s[2:])
+if ((0 < f and f <= 12) and (b > 12 or b == 0)): print("MMYY")
+elif ((0 < b and b <= 12) and (f > 12 or f == 0)): print("YYMM")
+elif (f == 0 or b == 0 or (f > 12 and b > 12)): print("NA")
+else: print("AMBIGUOUS")
