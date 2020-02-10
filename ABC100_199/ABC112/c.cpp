@@ -5,53 +5,43 @@ using namespace std;
 typedef long long ll;
 
 struct plot {
-  int x;
-  int y;
-  ll z;
+  int_least16_t X;
+  int Y;
+  ll H;
 };
 
 void printAns(int x, int y, ll z) { cout << x << ' ' << y << ' ' << z << endl; }
+
+bool plotCompareH(const plot& p1, const plot& p2) { return p1.H > p2.H; }
 
 int main() {
   int N;
   cin >> N;
   vector<plot> p(N);
-  vector<plot> v(N);
   for (int i = 0; i < N; i++) {
-    cin >> p[i].x >> p[i].y >> p[i].z;
+    cin >> p[i].X >> p[i].Y >> p[i].H;
   }
 
-  for (int i = 0; i < N; i++) {
-    v[i].x = p[i].x - p[0].x;
-    v[i].y = p[i].y - p[0].y;
-    v[i].z = p[i].z - p[0].z;
-    if (p[i].x == 0 && p[i].y == 0 && v[i].z > 0) {
-      printAns(p[i].x, p[i].y, p[i].z);
-      return 0;
+  sort(p.begin(), p.end(), plotCompareH);
+
+  if (N == 1) {
+    printAns(p[0].X, p[0].Y, p[0].H);
+    return 0;
+  }
+
+  for (int Cx = 0; Cx <= 100; Cx++) {
+    for (int Cy = 0; Cy <= 100; Cy++) {
+      ll Top = abs(Cx - p[0].X) + abs(Cy - p[0].Y) + p[0].H;
+      int cnt = 1;
+      for (int i = 1; i < N; i++) {
+        if (p[i].H == max(Top - abs(p[i].X - Cx) - abs(p[i].Y - Cy), 0LL))
+          cnt++;
+      }
+      if (cnt == N) {
+        printAns(Cx, Cy, Top);
+        return 0;
+      }
     }
-
-    if (p[0].x == 0 && p[0].y == 0 && v[i].z < 0) {
-      printAns(p[0].x, p[0].y, p[0].z);
-      return 0;
-    }
   }
-
-  if (v[1].z * v[2].z > 0) {
-    printAns(p[0].x + v[1].x + v[2].x, p[0].y + v[1].y + v[2].y,
-             p[0].z + v[1].z + v[2].z);
-    return 0;
-  }
-
-  else if (v[0].z == 0 && v[1].z == 0) {
-    printAns((p[0].x + p[3].x) / 2, (p[0].y + p[3].y) / 2,
-             (p[0].z + p[3].z) / 2 +
-                 abs(abs(p[3].x - p[0].x) + abs(p[3].y - p[0].y)) / 2);
-    return 0;
-  } else {
-    printAns((p[0].x + v[1].x + v[2].x), (p[0].y + v[1].x + v[2].x),
-             p[0].z + v[1].z + v[2].z);
-    return 0;
-  }
-
   return 0;
 }

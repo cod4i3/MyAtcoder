@@ -1,6 +1,7 @@
 A, B = map(int, input().split())
-ans, cnt = 1, A
+ans, cnt = 0, 1
 while (cnt < B):
-    cnt += A - 1
+    cnt -= 1
+    cnt += A
     ans += 1
 print(ans)

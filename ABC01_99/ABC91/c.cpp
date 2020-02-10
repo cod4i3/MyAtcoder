@@ -2,45 +2,43 @@
 #include <iostream>
 #include <vector>
 using namespace std;
-#define MAX_N 105
-bool seen[MAX_N];
-
-bool compare_by_b(pair<int, int> a, pair<int, int> b) {
-  if (a.second != b.second) {
-    return a.second < b.second;
-  } else {
-    return a.first < b.first;
-  }
-}
+#define REP(i, n) for (int i = 0; i < (int)(n); i++)
+#define all(x) (x).begin(), (x).end()
 
 int main() {
   int N;
   cin >> N;
-  vector<pair<int, int> > p, q;
-  for (int i = 0; i < N; i++) {
+  vector<pair<int, int>> red(N), blue(N);
+  REP(i, N) {
     int a, b;
     cin >> a >> b;
-    p.push_back(make_pair(a, b));
+    red[i] = make_pair(a, b);
   }
-
-  for (int i = 0; i < N; i++) {
+  REP(i, N) {
     int c, d;
     cin >> c >> d;
-    q.push_back(make_pair(c, d));
+    blue[i] = make_pair(c, d);
   }
-
-  sort(p.begin(), p.end());
-  sort(q.begin(), q.end());
+  sort(all(red));
+  sort(all(blue));
 
   int ans = 0;
   for (int i = 0; i < N; i++) {
+    int maxH = -1;
+    int del = -1;
+    int memo = -1;
     for (int j = 0; j < N; j++) {
-      if (seen[i]) break;
-      if (seen[j]) continue;
-      if (p[i].first < q[j].first && p[i].second < q[j].second) {
-        ans++;
-        seen[j] = true, seen[i] = true;
+      if (blue[i].first > red[j].first && blue[i].second > red[j].second &&
+          maxH < red[j].second) {
+        maxH = red[j].second;
+        del = j;
+        memo = i;
       }
+    }
+
+    if (del >= 0) {
+      red[del].first = red[del].second = 735477;
+      ans += 1;
     }
   }
 

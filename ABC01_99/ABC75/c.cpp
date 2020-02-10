@@ -5,45 +5,48 @@
 #define m0(x) memset(x, 0, sizeof(x))
 #define MAX_N 55
 using namespace std;
-using Graph = vector<vector<int> >;
 int N, M;
-Graph G(MAX_N);
 vector<bool> seen;
-vector<int> a(MAX_N), b(MAX_N);
+bool visited[55][55];
 
-void dfs(const Graph &G, int v) {
-  seen[v] = true;
-  for (auto next_v : G[v]) {
-    if (seen[next_v]) continue;
-    dfs(G, next_v);
+void dfs(const vector<vector<bool> > &v, int i) {
+  seen[i] = true;
+  for (int j = 0; j < N; j++) {
+    if (!v[i][j]) continue;
+    if (seen[j]) continue;
+    dfs(v, j);
   }
 }
 
 int main() {
   cin >> N >> M;
+  vector<vector<bool> > edge(N + 1, vector<bool>(N + 1, 0));
   REP(i, M) {
-    cin >> a[i] >> b[i];
-    a[i]--;
-    b[i]--;
-    G[a].push_back(b);
-    G[b].push_back(a);
+    int a, b;
+    cin >> a >> b;
+    a--;
+    b--;
+    edge[a][b] = true;
+    edge[b][a] = true;
   }
 
   int ans = 0;
+  REP(i, N) {
+    REP(j, N) {
+      seen.assign(N, false);
+      if (!edge[i][j]) continue;
+      if (visited[i][j] || visited[j][i]) continue;
+      edge[i][j] = edge[j][i] = false;
+      dfs(edge, i);
+      edge[i][j] = edge[j][i] = true;
 
-  for (int i = 1; i < N; i++) {
-    seen.assign(N, false);
-    dfs(G, i);
-    REP(j, seen.size()) cout << seen[j] << ' ';
-    cout << endl;
-    for (int j = 1; j < seen.size(); j++) {
-      if (!seen[j]) {
-        ans++;
-        break;
-      }
+      int cnt = 0;
+      REP(k, N) if (seen[k]) cnt++;
+      if (cnt != N) ans += 1;
+
+      visited[i][j] = visited[j][i] = true;
     }
   }
 
   cout << ans << endl;
-  return 0;
 }

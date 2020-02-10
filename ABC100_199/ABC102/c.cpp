@@ -1,27 +1,23 @@
+#include <algorithm>
 #include <iostream>
+#include <vector>
 using namespace std;
+using ll = long long;
 
 int main() {
-  int N, sum = 0, cntp = 0,cntn = 0, zero=0;
+  int N;
   cin >> N;
-  int A[N];
-  int p = 0, n;
+  vector<ll> A(N);
+  vector<ll> B(N);
   for (int i = 0; i < N; i++) {
-    int a;
-    cin >> a;
-    A[i] -= i;
-    sum += A[i];
-    if (A[i]) {
-      cntp++;
-      p += A[i];
-    }else if(A[i] == 0)
-      zero++;
+    cin >> A[i];
+    B[i] = A[i] - (i + 1);
   }
+  sort(B.begin(), B.end());
 
-  n = p - sum;
-  cntn = N - cntp - zero;
-  int ans = 0;
-  int b = sum / abs(cntn - cntp);
-  for (int i = 0; i < N; i++) {
-  }
+  ll median = B[(B.size() + 1) / 2 - 1];
+  ll ans = 0;
+  for (int i = 0; i < N; i++) ans += abs(B[i] - median);
+  cout << ans << endl;
+  return 0;
 }

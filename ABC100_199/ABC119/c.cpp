@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
 using namespace std;
@@ -8,7 +9,6 @@ int main() {
   vector<int> l(N);
   for (int i = 0; i < N; i++) cin >> l[i];
   sort(l.begin(), l.end());
-  do{
-      
+  do {
   } while (next_permutation(l.begin(), l.end()));
 }

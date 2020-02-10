@@ -1,50 +1,53 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
 using namespace std;
 typedef long long ll;
 using Graph = vector<vector<pair<int, bool> > >;
 
-// 二部グラフ判定
-vector<int> color;
-bool dfs(const Graph &G, int v, int cur) {
-  color[v] = cur;
-  for (auto next_v : G[v]) {
-    // 隣接頂点がすでに色確定していた場合
-    if (color[next_v.first] != -1) {
-      if (color[next_v.first] != next_v.second) return false;
-      continue;
-    }
-
-    // 隣接頂点の色を変えて、再帰的に探索 (一回でも false が返ってきたら false)
-    if (!dfs(G, next_v.first, next_v.second)) return false;
-  }
-  return true;
-}
-
 int main() {
   int N;
   cin >> N;
-  Graph G(N);
-  for (int i = 1; i <= N + 1; i++) {
-    int A;
-    cin >> A;
-    for (int j = 0; j < A; j++) {
+  Graph A(N);
+  for (int i = 0; i < N; i++) {
+    int a;
+    cin >> a;
+    for (int j = 0; j < a; j++) {
       int x;
       bool y;
       cin >> x >> y;
-      G[i].push_back(make_pair(x - 1, y));
+      A[i].push_back(make_pair(x - 1, y));
     }
   }
 
-  color.assign(N + 1, -1);
-  int cnt, ans = 0;
-  for (int v = 0; v < N; ++v) {
-    cnt = 0;
-    if (color[v] != -1) continue;  // v が探索済みだったらスルー
-    if (!dfs(G, v, 1))
-      for (auto c : color)
-        if (c == 1) cnt++;
-    ans = max(cnt, ans);
+  int ans = 0;
+  // ビットが立ってる時正直者
+  for (int mask = 0; mask < (1 << N); mask++) {
+    // 矛盾があるかないか
+    bool OK = true;
+    for (int i = 0; i < N; i++) {
+      // i人目を正直者とした場合を考える（不親切なら発言内容はどうでもいい）
+      if ((1 << i) & mask) {
+        for (pair<int, bool> P : A[i]) {
+          if (((1 << P.first) & mask) > 0 && P.second == 0) OK = false;
+          if (((1 << P.first) & mask) == 0 && P.second == 1) OK = false;
+        }
+      } else
+        continue;
+    }
+
+    if (OK) {
+      // maskを2進数に、向きは反対になっているがこれでもOKのはず
+      string bits = "";
+      for (int i = 0; i < N; i++) {
+        if ((1 << i) & mask)
+          bits += '1';
+        else
+          bits += '0';
+      }
+      int sum = count(bits.begin(), bits.end(), '1');
+      ans = max(sum, ans);
+    }
   }
 
   cout << ans << endl;

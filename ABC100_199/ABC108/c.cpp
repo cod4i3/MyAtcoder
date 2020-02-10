@@ -1,30 +1,17 @@
-/*
-  a+b ≡ b+c ≡ c+a ≡ 0 (modK)
-⇔ 2a  ≡ 2b  ≡ 2c  ≡ 0 (modK)
+// memoを見ないで回答、 2020/2/7
 
-条件を満たすのは
- Kが奇数の時
-  K⊥2より、
-  a  ≡  b  ≡  c  ≡ 0 (modK)
-  の時に、条件を満たす
-  つまり、aとbとcが全てKの倍数であれば良い
-  N以下のKの倍数の数をxと置くと
-  並べ方はa,b,cでx通りずつあるので、x^3が答え
+#include <cmath>
+#include <iostream>
+using namespace std;
+typedef long long ll;
 
-  なお、 x = n/K(Kの倍数の個数)
+ll pow3(ll N) { return N * N * N; }
 
- Kが偶数の時
-    2a  ≡ 2b  ≡ 2c  ≡ 0 (modK)
-    a  ≡  b  ≡  c  ≡ 0  (modK') (ただし K' = K/2)
-⇔       a  ≡  b  ≡  c  ≡ 0     (modK)
-    or  a  ≡  b  ≡  c  ≡ K/2   (modK)
+int main() {
+  int N, K;
+  cin >> N >> K;
 
-  の時に、つまり aとbとcが全てKの倍数か、余りがK/2であれば良い
-  これはa,b,cに K/2を足せば求められる
-
-  1) a  ≡  b  ≡  c  ≡ 0 の時
-    奇数の時と同様にして、x^3
-  2)  a  ≡  b  ≡  c  ≡ K/2
-    
-     x = (n+K/2)/K
-*/
+  if (K % 2 == 0) cout << pow3(N / K) + pow3((N + K / 2) / K) << endl;
+  if (K % 2 == 1) cout << pow3(N / K) << endl;
+  return 0;
+}
