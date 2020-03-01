@@ -80,6 +80,17 @@ ll binary(ll bin) {
 int ceil(int x){return (x+1)/2;}
 int floor(int x){return (x-1)/2;}
 
+
+ll RepeatSquaring(ll N, ll P, ll M) {
+  if (P == 0) return 1;
+  if (P % 2 == 0) {
+    ll t = RepeatSquaring(N, P / 2, M);
+    return t * t % M;
+  }
+  return N * RepeatSquaring(N, P - 1, M);
+}
+
+
 順に
 デバッグ用
 for文(0~N-1)
