@@ -1,3 +1,3 @@
 x = input()
 s = input()
-print(s.strip(x))
+print(s.replace(x, ''))

@@ -1,0 +1,5 @@
+a, b, c = map(int, input().split())
+l = (a ** 2) + (b ** 2) + (c ** 2)
+r = 2 * (a * b + b * c + c * a)
+if (l >= r): print('Yes')
+else: print('No')

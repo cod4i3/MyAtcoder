@@ -1,8 +1,8 @@
 #define _GLIBCXX_DEBUG
 #define _LIBCPP_DEBUG 0
-#define REP(i, n) for (int i = 0; i < (int)(n); i++)
-#define REP2(i, s, n) for (int i = (s); i < (int)(n); i++)
-#define REPR(i,n) for(int i=n;i>=0;i--)
+#define FOR(i, n) for (int i = 0; i < (int)(n); i++)
+#define FOR2(i, s, n) for (int i = (s); i < (int)(n); i++)
+#define FORR(i,n) for(int i=n;i>=0;i--)
 #define all(x) (x).begin(),(x).end()
 #define m0(x) memset(x,0,sizeof(x))
 template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
@@ -77,8 +77,8 @@ ll binary(ll bin) {
   return ans;
 }
 
-int ceil(int x){return (x+1)/2;}
-int floor(int x){return (x-1)/2;}
+int ceil(int x){return (x+1)/1;}
+int floor(int x){return (x-1)/1;}
 
 
 ll RepeatSquaring(ll N, ll P, ll M) {
