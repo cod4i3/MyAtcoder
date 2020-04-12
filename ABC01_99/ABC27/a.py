@@ -1,0 +1,5 @@
+l = list(map(int, input().split()))
+l.sort()
+if (l[1] != l[0]): print(l[0])
+elif (l[2] != l[1]): print(l[2])
+else: print(l[0])

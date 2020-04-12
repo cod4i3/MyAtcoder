@@ -1,0 +1,5 @@
+A, B = map(int, input().split())
+A, B = abs(A), abs(B)
+if(A < B): print('Ant')
+elif(B < A): print('Bug')
+else: print('Draw')
