@@ -1,7 +1,7 @@
 // 計算量は O(|E|log|V|)
 // firstが最短距離、 secondが頂点番号
 using P = pair<int, int>;
-struct edge{int to, cost;};
+struct edge{int to, cost; Edge(int t, int w) : to(t), weight(w) { }};
 
 int V;
 vector<edge> G[MAX_V];
