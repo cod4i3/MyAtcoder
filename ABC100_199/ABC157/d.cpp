@@ -1,71 +1,82 @@
 #include <algorithm>
 #include <iostream>
-#include <string>
 #include <vector>
-#define REP(i, n) for (int i = 0; i < (int)(n); i++)
+#define FOR(i, n) for (int i = 0; i < (int)(n); i++)
 using namespace std;
 typedef long long ll;
 
-// union by size + path having
-class UnionFind {
- public:
-  vector<ll> par;  // 各元の親を表す配列
-  vector<ll> siz;  // 素集合のサイズを表す配列(1 で初期化)
+int N, M, K, p, q, cnt;
 
-  // Constructor
-  UnionFind(ll sz_) : par(sz_), siz(sz_, 1LL) {
-    for (ll i = 0; i < sz_; ++i) par[i] = i;  // 初期では親は自分自身
-  }
-  void init(ll sz_) {
-    par.resize(sz_);
-    siz.assign(sz_, 1LL);  // resize だとなぜか初期化されなかった
-    for (ll i = 0; i < sz_; ++i) par[i] = i;  // 初期では親は自分自身
-  }
+struct UnionFind {
+  // 各ノードの親と、そのコンストラクタ（初期値は全部-1)
+  vector<int> par;
+  explicit UnionFind(int n) : par(n, -1) {}
 
-  // Member Function
-  // Find
-  ll root(ll x) {  // 根の検索
-    while (par[x] != x) {
-      x = par[x] = par[par[x]];  // x の親の親を x の親とする
-    }
-    return x;
+  // 根を返す。mergeで初期化され各ノードの根は自分自身となる。
+  int root(int x) {
+    if (par[x] < 0)
+      return x;
+    else
+      return par[x] = root(par[x]);
   }
 
-  // Union(Unite, Merge)
-  bool merge(ll x, ll y) {
+  // 根が同じかどうか
+  bool same(int x, int y) { return root(x) == root(y); }
+
+  // 結合
+  bool merge(int x, int y) {
     x = root(x);
     y = root(y);
     if (x == y) return false;
-    // merge technique（データ構造をマージするテク．小を大にくっつける）
-    if (siz[x] < siz[y]) swap(x, y);
-    siz[x] += siz[y];
+
+    // swap(x, y)。 vector以外のライブラリに拠らない構成にしてみた
+    // swap使いたいなら #include<utility> 忘れないように
+    if (par[x] > par[y]) {
+      int tmp = x;
+      x = y;
+      y = tmp;
+    }
+
+    // 根を統一する。
+    // 根はサイズを保存しており、根以外は親のindexを持つ
+    par[x] += par[y];
     par[y] = x;
     return true;
   }
 
-  bool issame(ll x, ll y) {  // 連結判定
-    return root(x) == root(y);
-  }
-
-  ll size(ll x) {  // 素集合のサイズ
-    return siz[root(x)];
-  }
+  int size(int x) { return -par[root(x)]; }
 };
 
 int main() {
-  ll N, M, K, p, q;
   cin >> N >> M >> K;
-  UnionFind follow(N), block(N);
-  REP(i, M) {
-    cin >> p >> q;
-    --p;
-    --q;
-    follow.merge(p, q);
+  vector<int> ans(N, -1);
+  UnionFind uf(N);
+  // 友人とブロック関係が同一になることがないからこうしたが
+  // その条件がない場合はsetの方がいいかもしれない
+  vector<vector<int>> minus(N, vector<int>(0));
+  FOR(i, M) {
+    int a, b;
+    cin >> a >> b;
+    a--;
+    b--;
+    minus[a].emplace_back(b);
+    minus[b].emplace_back(a);
+    uf.merge(a, b);
   }
-  REP(i, K) {
-    cin >> p >> q;
-    --p;
-    --q;
-    block.merge(p, q);
+
+  FOR(i, K) {
+    int c, d;
+    cin >> c >> d;
+    c--;
+    d--;
+    if (!uf.same(c, d)) continue;
+    minus[c].emplace_back(d);
+    minus[d].emplace_back(c);
   }
+
+  FOR(i, N) ans[i] = uf.size(i) - minus[i].size() - 1;
+
+  FOR(i, N - 1) cout << ans[i] << " ";
+  cout << ans[N - 1] << endl;
+  return 0;
 }
