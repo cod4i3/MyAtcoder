@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 using namespace std;
+using ll = long long;
 
 int main() {
   int N;
@@ -11,12 +12,13 @@ int main() {
   sort(L.begin(), L.end());
 
   int ans = 0;
-  for (int i = 0; i < N - 1; i++) {
+  for (int i = 0; i < N; i++) {
     for (int j = i + 1; j < N; j++) {
-      // |b-c| < a < b+c
-      
+      int d = distance(lower_bound(L.begin(), L.end(), L[i] + L[j]), L.end());
+      ans += (N - 1 - j) - d;
     }
   }
 
   cout << ans << endl;
+  return 0;
 }

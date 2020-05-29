@@ -53,6 +53,20 @@ int binary_search(int key){
 }
 
 
+
+
+int binary_search(int l, int key, vector<int> L) {
+  int r = L.size();
+  while (abs(r - l) > 1) {
+    int mid = (r + l) / 2;
+    
+    if (L[mid] >= key)
+      r = mid;
+    else
+      l = mid;
+  }
+  return r;
+}
 */
 
 

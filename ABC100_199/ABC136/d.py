@@ -1,42 +1,23 @@
+from math import *
 S = input()
-N = len(S)
-r, l = 0, 0
-cnt = 0
-ans = [0] * N
-for i in range(N):
-    if (S[i] == 'R'):
-        cnt += 1
-    if (S[i] == 'L' and S[i - 1] == 'R'):
-        ans[i - 1] = cnt
-        cnt = 0
-print(range(N - 1, -1, -1))
-for i in range(N - 1, -1, -1):
-    if (S[i] == 'L'):
-        cnt += 1
-    if (S[i] == 'R' and S[i + 1] == 'L'):
-        ans[i + 1] = cnt
-        cnt = 0
-print(ans)
-for i in range(N - 1):
-    if (ans[i] > 0 and ans[i + 1] > 0):
-        a = (ans[i] + ans[i + 1]) // 2
-        if((ans[i] + ans[i + 1]) % 2):
-            if (ans[i] > ans[i + 1]):
-                sw = ans[i]
-                ans[i] = a + 1
-                ans[i + 1] = a
-                if (sw % 2 == 0):
-                    ans[i], ans[i + 1] = ans[i + 1], ans[i]
-            else:
-                sw = ans[i + 1]
-                ans[i] = a
-                ans[i + 1] = a + 1
-                if (sw % 2 == 0):
-                    ans[i], ans[i + 1] = ans[i], ans[i + 1]
-
+ans = [0] * len(S)
+cur_r = True
+l, s = 0, 0
+for i in range(len(S)):
+    if(cur_r):
+        if S[i] == 'R': l += 1
         else:
-            ans[i], ans[i + 1] = a, a
-        print(i)
-
-answer = [str(ans[i]) for i in range(len(ans))]
-print(" ".join(answer))
+            ans[i - 1] += ceil(l / 2)
+            ans[i] += floor(l / 2)
+            l, s = 1, i
+            cur_r = False
+    else:
+        if(S[i] == 'L'): l += 1
+        else:
+            ans[s] += ceil(l / 2)
+            ans[s - 1] += floor(l / 2)
+            l, s = 1, i
+            cur_r = True
+ans[s] += ceil(l / 2)
+ans[s - 1] += floor(l / 2)
+print(' '.join(str(n) for n in ans))
