@@ -1,0 +1,5 @@
+def nCk(n, k, p):
+    ret = 1
+    for i in range(k):
+        ret = ret * (n - i) * pow(i + 1, -1, mod = p) 
+    return ret

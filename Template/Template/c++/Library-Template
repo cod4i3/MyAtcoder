@@ -1,0 +1,49 @@
+最大値と最小値、及びそのインデックス
+
+std::vector<int> vec(100);
+for (size_t i = 0; i < vec.size(); ++i) {
+    vec[i] = i;
+}
+
+std::random_shuffle (vec.begin(), vec.end());
+
+// std::*_element は，イテレーターを返すので '*' で値を取得する
+int min = *std::min_element(vec.begin(), vec.end());
+int max = *std::max_element(vec.begin(), vec.end());
+
+std::vector<int>::iterator minIt = *std::min_element(vec.begin(), vec.end());
+std::vector<int>::iterator maxIt = *std::max_element(vec.begin(), vec.end());
+
+最大値、最小値のインデックス
+
+// distance で vec の先頭イテレーターと minIt, maxIt との距離を取得する．
+// インデックスを取得したいときは，vec の先頭イテレーターを指定する必要がある．
+// 例えば，vec.begin() + 1 とか指定すると答えは変わる．
+size_t minIndex = std::distance(vec.begin(), minIt);
+size_t maxIndex = std::distance(vec.begin(), maxIt);
+
+
+
+
+総和
+#include <numeric>
+
+int main() 
+{
+    int list[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    const size_t size = sizeof(list) / sizeof(list[0]);
+
+    int sum = std::accumulate(list, list + size, 0);    // ans = 55
+    return 0;
+}
+
+
+
+変換、ここでは大文字と小文字
+#include <algorithm>
+
+std::string src ="abc";
+std::string dst = src;
+
+// src と dst のサイズが同じでなければダメ．
+std::transform(src.begin(), src.end(), dst.begin(), toupper);

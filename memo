@@ -1,0 +1,19 @@
+cargo atcoder new abc163
+ 下のようなディレクトリができる
+ abc163
+├── Cargo.lock
+├── Cargo.toml
+└── src
+    └── bin
+        ├── a.rs
+        ├── b.rs
+        ├── c.rs
+        ├── d.rs
+        ├── e.rs
+        └── f.rs
+
+https://atcoder.jp/contests/panasonic2020
+ならっば最後のpanasonic2002
+
+cargo atcoder test a
+cargo atcoder submit a
