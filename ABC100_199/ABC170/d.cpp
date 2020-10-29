@@ -1,7 +1,6 @@
 #pragma GCC optimize("Ofast")
 #include <algorithm>
 #include <iostream>
-#include <set>
 #include <vector>
 using namespace std;
 
@@ -10,36 +9,27 @@ int main() {
   cin.tie(nullptr);
   int N;
   cin >> N;
+
   vector<int> A(N);
-  set<int> s;
-  vector<int> seen(N, 0);
-  int a;
+  vector<int> seen(1e6 + 10, 0);
   for (int i = 0; i < N; i++) {
-    cin >> a;
-    s,ins
-    if(seen[a)
+    cin >> A[i];
+    seen[A[i]]++;
   }
+  sort(A.begin(), A.end());
 
-  sort(A.begin(), A.end(), std::greater());
-
-  // 割り切れる物は1とする
-  for (int i = 0; i < N; i++) {
-    if (seen[i]) continue;
-    for (int j = i + 1; j < N; j++) {
-      if (A[j] % A[i] == 0) {
-        seen[j] = 1;
-      }
-      if (A[j] == A[i]) {
-        seen[i] = 1;
+  vector<bool> ok(1e6 + 10, true);
+  for (int i = 1; i < 1e6 + 10; i++) {
+    if (seen[i] > 0) {
+      if (seen[i] >= 2) ok[i] = false;
+      for (int j = i * 2; j < 1e6 + 1; j += i) {
+        ok[j] = false;
       }
     }
   }
 
   int ans = 0;
-  for (int i = 0; i < N; i++) {
-    if (seen[i] == 0) ans++;
-  }
-
+  for (int i = 0; i < N; i++)
+    if (ok[A[i]]) ans++;
   cout << ans << endl;
-  return 0;
 }

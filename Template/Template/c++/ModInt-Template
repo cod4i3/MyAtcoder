@@ -91,3 +91,5 @@ struct combination {
 
 istream& operator>>(istream& is, const mint& a) { return is >> a.x; }
 ostream& operator<<(ostream& os, const mint& a) { return os << a.x; }
+
+// cin >> a.x のように念の為.xをつけておくこと

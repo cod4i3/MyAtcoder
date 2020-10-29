@@ -18,14 +18,20 @@ int main() {
   queue<ll> que;
   for(int i=0; i<N; i++) que.push(A[i]);
 
-  pair<ll, ll> P;
-  ll sum = 0;
-  P.first = que.front();
-  que.pop();
-  P.second = que.front();
+  ll ans = 0;
+
+  queue<ll> ring;
+  ring.push(que.front());
   que.pop();
 
   while(!que.empty()){
-      swap(P.first, P.second);
+      ans += ring.front();
+      ring.pop();
+      ring.push(que.front());
+      ring.push(que.front());
+      que.pop();
   }
+
+  cout << ans << endl;
+  return 0;
 }

@@ -9,6 +9,9 @@ using ll = long long;
 const int MAX_N = 100000;
 int n, S;
 vector<int> a(MAX_N);
+/*
+ sumがS以上である区間の長さで最小のもの
+*/
 
 void solve() {
   int res = n + 1;

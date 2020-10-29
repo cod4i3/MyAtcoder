@@ -11,9 +11,9 @@ map< ll, int > prime_factor(ll n) {
 }
 
 
-
-std::vector<std::pair<ll, int> > prime_factor(ll n) {
-  std::vector<std::pair<ll, int> > ret;
+// vectorバージョン
+vector<pair<ll, int> > prime_factor(ll n) {
+  vector<pair<ll, int> > ret;
 
   for (ll i = 2; i*i <= n; i++) {
     if (n % i != 0) { continue; }
@@ -22,11 +22,11 @@ std::vector<std::pair<ll, int> > prime_factor(ll n) {
       exp_v++;
       n /= i;
     }
-    ret.push_back( std::make_pair(i, exp_v) );
+    ret.push_back( make_pair(i, exp_v) );
   }
 
   if (n != 1) {
-    ret.push_back( std::make_pair(n, 1) );
+    ret.push_back( make_pair(n, 1) );
   }
 
   return ret;

@@ -1,6 +1,6 @@
 struct edge {
   int to, cost;
-  Edge(int t, int w) : to(t), weight(w) { }
+  Edge(int t, int c) : to(t), cost(c) { }
 };
 
 int V;

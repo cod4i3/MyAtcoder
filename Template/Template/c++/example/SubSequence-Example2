@@ -4,6 +4,10 @@
 using namespace std;
 const int MAX_N = 100005;
 
+/*
+N個の数からなる数列、i番目の数をa[i]
+a[l] ~ a[r]が単調増加である(l, r)の数を求めよ
+*/
 int main() {
   int N;
   cin >> N;
