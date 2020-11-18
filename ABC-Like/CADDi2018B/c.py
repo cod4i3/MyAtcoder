@@ -1,4 +1,3 @@
-// 素因数分解
 def prime_factorize(n):
     a = []
     while n % 2 == 0:
@@ -15,7 +14,16 @@ def prime_factorize(n):
         a.append(n)
     return a
 
-// 数える時
-from collections import Counter
-c = Counter(prime_factorize(N))
-c.keys(), c.values(), c.items()でアクセス
+
+def main():
+    N, P = map(int, input().split())
+    from collections import Counter
+    C = Counter(prime_factorize(P))
+    ans = 1
+    for e in C.items():
+        if(e[1] >= N): ans *= e[0] ** (e[1] // N)
+    print(ans)
+
+
+if __name__ == "__main__":
+    main()

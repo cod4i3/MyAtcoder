@@ -1,0 +1,19 @@
+def rep_pow(x, n):
+    ans = 1
+    while n:
+        if n % 2:
+            ans *= x
+        x *= x
+        n >>= 1
+    return ans
+
+def rep_pow(x, n):
+    ans, MOD = 1, 998244353
+    while n:
+        if n % 2:
+            ans *= x
+            ans %= MOD
+        x *= x
+        x %= MOD
+        n >>= 1
+    return ans
