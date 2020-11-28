@@ -2,7 +2,6 @@
 #include <algorithm>
 #include <cassert>
 #include <iostream>
-#include <map>
 #include <vector>
 using namespace std;
 using ll = long long;
@@ -96,23 +95,27 @@ int main() {
   int N;
   string S;
   cin >> N >> S;
-  map<char, int> mp;
-  int l = 0, r = 0;
-  mint sum = 0;
-  mint ans = 0;
-  while (true) {
-    while (r < N && mp[S[r]] == 0) {
-      mp[S[r++]]++;
-    }
-    for (auto m : mp) {
-      cout << m.first << " " << m.second << endl;
-    }
-    cout << endl;
-    if (l >= N) break;
-    ll len = r - l;
-    ans += mint(2).pow(len - 1);
-    mp[S[l++]]--;
+
+  vector<ll> c(26, 0);
+  for (int i = 0; i < N; i++) {
+    c[S[i] - 'a']++;
   }
+
+  int cnt = 0;
+  for (int i = 0; i < 26; i++) {
+    if (c[i] > 0) cnt++;
+  }
+
+  mint ans = 1, res = 0;
+  // 選び方は 0 ~ c[i]
+  for (int i = 0; i < 26; i++) {
+    if (!c[i]) continue;
+    res = c[i] + 1;
+    ans *= res;
+  }
+
+  // 全てが0のパターン
+  ans -= 1;
 
   cout << ans << endl;
 }

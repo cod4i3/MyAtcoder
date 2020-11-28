@@ -3,45 +3,48 @@
 #include <queue>
 #include <vector>
 using namespace std;
+using ll = long long;
+using P = pair<int, int>;
 
 struct Edge {
   int to, weight;
   Edge(int t, int w) : to(t), weight(w) {}
 };
 
-vector<vector<int>> dist;
-vector<int> res;
+int N, M;
+vector<vector<Edge>> G;
+vector<vector<ll>> dist;
+vector<bool> seen;
 
-void bfs(int from, vector<vector<Edge>> G, vector<vector<bool>> seen) {
-  queue<int> que;
-  que.push(from);
+void dijkstra(int s) {
+  priority_queue<P, vector<P>, greater<P>> que;
+  dist[s][s] = 0;
+  que.push(P(0, s));
 
   while (!que.empty()) {
-    int v = que.front();
+    P p = que.top();
     que.pop();
-    for (auto next_v : G[v]) {
-      int to = next_v.to, weight = next_v.weight;
-      if (seen[from][to]) continue;
-      que.push(to);
-      seen[from][to] = seen[to][from] = true;
+    int v = p.second;
+    if (dist[s][v] < p.first) continue;
 
-      dist[from][to] = min(dist[from][to], dist[from][v] + weight);
-      res[from] = max(res[from], dist[from][to]);
+    for (int i = 0; i < G[v].size(); i++) {
+      Edge e = G[v][i];
+      if (dist[s][e.to] > dist[s][v] + e.weight) {
+        dist[s][e.to] = dist[s][v] + e.weight;
+        que.push(P(dist[s][e.to], e.to));
+      }
     }
   }
 }
 
 int main() {
-  int N, M;
   cin >> N >> M;
-  vector<vector<Edge>> G(N);
-
-  vector<vector<bool>> seen(N, vector<bool>(N, false));
+  G.resize(N);
+  seen.resize(N, false);
   dist.resize(N);
-  for (int i = 0; i < N; i++) dist[i].resize(N, 100000000);
-  for (int i = 0; i < N; i++)
-    for (int j = 0; j < N; j++) dist[i][j] = 0;
-  res.resize(N, -1);
+  for (int i = 0; i < N; i++) dist[i].resize(N, N * 1000 + 10);
+  for (int i = 0; i < N; i++) dist[i][i] = 0;
+
 
   for (int i = 0; i < M; i++) {
     int from, to, weight;
@@ -52,11 +55,18 @@ int main() {
   }
 
   for (int i = 0; i < N; i++) {
-    bfs(i, G, seen);
+    dijkstra(i);
   }
 
-  int ans = 100000000;
-  for (int i = 0; i < N; i++) ans = min(ans, res[i]);
+
+  ll ans = 10000000;
+  for (int i = 0; i < N; i++) {
+    ll res = 0;
+    for (int j = 0; j < N; j++) {
+      res = max(res, dist[i][j]);
+    }
+    ans = min(res, ans);
+  }
 
   cout << ans << endl;
   return 0;

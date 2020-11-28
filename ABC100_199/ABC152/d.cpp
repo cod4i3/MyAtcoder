@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 using namespace std;
 #define REP(i, n) for (int i = 0; i < (int)(n); i++)
 #define MAX_N 2000000
@@ -6,16 +7,28 @@ using namespace std;
 int main() {
   int N;
   cin >> N;
-  int same[MAX_N];
-  REP(i, N) {
-    if (i < 1000000 && i % 111111 == 0)
-      same[i] = 11112;
-    else if (i < 100000 && i % 11111 == 0)
-      same[i] = 1112;
-    else if (i % 1111 == 0)
-      same[i] = 112;
-    else if (i % 111 == 0)
-      same[i] = 12;
+
+  vector<vector<int>> digitA(9, vector<int>(9));
+  vector<vector<int>> digitB(9, vector<int>(9));
+  for (int i = 1; i <= N; i++) {
+    if(i % 10 == 0) continue;
+    int down = i % 10;
+    int top = i;
+    while (top >= 10) {
+      top /= 10;
+    }
+    top--, down--;
+    digitA[top][down]++;
+    digitB[top][down]++;
   }
-  if (i % 111111 == 0):
+
+  int ans = 0;
+  for (int i = 0; i < 9; i++) {
+    for (int j = 0; j < 9; j++) {
+       ans += digitA[i][j] * digitB[j][i];
+    }
+  }
+
+  cout << ans << endl;
+  return 0;
 }

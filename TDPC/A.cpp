@@ -15,7 +15,7 @@ int main() {
     sum += p[i];
   }
 
-  // 問題の番号,　配点の合計
+  // 問題の番号, 配点の合計
   vector<vector<bool> > memo(N + 1, vector<bool>(sum + 1, false));
 
   memo[0][0] = true;

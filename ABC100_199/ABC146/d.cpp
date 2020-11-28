@@ -1,49 +1,61 @@
+#define _GLIBCXX_DEBUG
+#include <algorithm>
 #include <iostream>
+#include <numeric>
 #include <vector>
 using namespace std;
-using Graph = vector<vector<int> >;
+vector<vector<int>> color;
+vector<vector<int>> G;
+vector<vector<int>> used;
+vector<bool> seen;
+int K = 0;
 
-// 二部グラフ判定
-vector<int> color;
-bool dfs(const Graph &G, int v, int cur = 1) {
-  color[v] = cur;
-  for (auto next_v : G[v]) {
-    // 隣接頂点がすでに色確定していた場合
-    if (color[next_v] != -1) {
-      if (color[next_v] == cur) return false;  // 同じ色が隣接したらダメ
-      continue;
-    }
-
-    // 隣接頂点の色を変えて、再帰的に探索 (一回でも false が返ってきたら false)
-    if (!dfs(G, next_v, 1 - cur)) return false;
+void dfs(int v) {
+  if (seen[v]) return;
+  seen[v] = true;
+  int c = 1;
+  for (int i = 0; i < int(used[v].size()); i++) {
+    if (c == used[v][i]) c++;
   }
-  return true;
+
+  for (int nv : G[v]) {
+    if (color[v][nv] != -1) continue;
+    color[v][nv] = color[nv][v] = c;
+    used[nv].emplace_back(c);
+    dfs(nv);
+    c++;
+  }
+
+  K = max(K, c - 1);
+  return;
 }
 
 int main() {
-  // 頂点数と辺数
-  int N, M;
-  cin >> N >> M;
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  int N;
+  cin >> N;
 
   // グラフ入力受取
-  Graph G(N);
-  for (int i = 0; i < M; ++i) {
+  G.resize(N);
+  used.resize(N);
+  seen.resize(N, false);
+  // 探索
+  color.resize(N, vector<int>(N, -1));
+  vector<pair<int, int>> p(N);
+  for (int i = 0; i < N - 1; ++i) {
     int a, b;
     cin >> a >> b;
+    a--, b--;
     G[a].push_back(b);
     G[b].push_back(a);
+    p[i] = {a, b};
   }
 
-  // 探索
-  color.assign(N, -1);
-  bool is_bipartite = true;
-  for (int v = 0; v < N; ++v) {
-    if (color[v] != -1) continue;  // v が探索済みだったらスルー
-    if (!dfs(G, v)) is_bipartite = false;
+  dfs(0);
+  cout << K << endl;
+  for (int i = 0; i < N - 1; i++) {
+    cout << color[p[i].first][p[i].second] << endl;
   }
-
-  if (is_bipartite)
-    cout << "Yes" << endl;
-  else
-    cout << "No" << endl;
+  return 0;
 }
