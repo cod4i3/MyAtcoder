@@ -1,2 +1,0 @@
-cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/code413/Kyopro/AtCoder/ABC100_199/ABC136/abc136/target/debug/build/typenum-e0fdb6878f159f81/out/consts.rs
-cargo:rustc-env=TYPENUM_BUILD_OP=/Users/code413/Kyopro/AtCoder/ABC100_199/ABC136/abc136/target/debug/build/typenum-e0fdb6878f159f81/out/op.rs

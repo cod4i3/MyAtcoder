@@ -53,10 +53,32 @@ mint COM(int n, int k) {
   return fac[n].x * (finv[k].x * finv[n - k].x % mod) % mod;
 }
 
+
+// modなしversion
+const int MAX_C = 1100;
+long double com[MAX_C][MAX_C];
+
+void cominit() {
+    for (int i = 0; i < MAX_C; ++i) for (int j = 0; j < MAX_C; ++j) com[i][j] = 0.0;
+    com[0][0] = 1.0;
+    for (int i = 1; i < MAX_C; ++i) {
+        com[i][0] = 1.0;
+        for (int j = 1; j < MAX_C; ++j) {
+            com[i][j] = (com[i-1][j-1] + com[i-1][j]);
+        }
+    }
+}
+
 int main() {
     // 前処理
     COMinit();
 
     // 計算例
     cout << COM(100000, 50000) << endl;
+
+    // 前処理
+    cominit();
+
+    // 計算例
+    cout << com[n][r] << endl;
 }

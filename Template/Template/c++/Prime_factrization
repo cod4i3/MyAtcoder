@@ -11,7 +11,7 @@ map< ll, int > prime_factor(ll n) {
 }
 
 
-// vectorバージョン
+// vectorバージョン 
 vector<pair<ll, int> > prime_factor(ll n) {
   vector<pair<ll, int> > ret;
 
