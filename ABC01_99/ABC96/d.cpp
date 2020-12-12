@@ -7,7 +7,7 @@ int main() {
   cin >> N;
 
   vector<int> P;
-  for (int i = 2; i <= 55555; i++) {
+  for (int i = 3; i <= 55555; i++) {
     bool flag = true;
     for (int j = 2; j * j <= i; j++) {
       if (i % j == 0) {
@@ -15,9 +15,10 @@ int main() {
           break;
       }
     }
-    if (flag) P.emplace_back(i);
+    if (flag && i % 5 == 1) P.emplace_back(i);
+    if(int(P.size()) == N) break;
   }
 
-  
+  for(int i=0; i<N; i++) cout << P[i] << " ";
   cout << endl;
 }

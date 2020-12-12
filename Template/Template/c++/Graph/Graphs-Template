@@ -144,17 +144,17 @@ void bfs(int top) {
     seen[top]=true;
  
     while(!q.empty()){
-	int v = q.front();
-	q.pop();
-	for(auto next_v: G[v]){
-	    if(seen[next_v])
-		continue;
-	    q.push(next_v);
-	    seen[next_v]=true;
-	    a[top][next_v]=a[top][v]+1;
-	    if(top<next_v)
-		ans[a[top][next_v]]++;
-	}
+	    int v = q.front();
+	    q.pop();
+        for(auto next_v: G[v]){
+            if(seen[next_v])
+            continue;
+            q.push(next_v);
+            seen[next_v]=true;
+            a[top][next_v]=a[top][v]+1;
+            if(top<next_v)
+            ans[a[top][next_v]]++;
+        }
  
     }
 }

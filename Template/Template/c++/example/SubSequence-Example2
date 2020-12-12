@@ -16,13 +16,22 @@ int main() {
 
   int l = 0, r = 0;
   long long ans = 0;
-
+  /*
   while (true) {
     while (a[r + 1] > a[r]) r++;
     if (l >= N) break;
     ans += r - l + 1;
     l++;
     if (l == r + 1) r++;
+  }
+  */
+
+  // こっちの書き方の方が個人的には好みかもしれない
+  for(l = 0; l<N; l++){
+    for(; r < N && a[r + 1] > a[r]; r++){
+    }
+    ans += r - l + 1;
+    if(l == r + 1) r++;
   }
 
   cout << ans << endl;
