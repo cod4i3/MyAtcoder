@@ -1,0 +1,160 @@
+// 没部分(遅延評価に統一)
+
+// 後で見返す用に説明付き
+// 区間最小を求めるテンプレート
+// 遅延評価も付いてる
+// いくつかのサイトを参考に実装
+// ちなみにstructでもclassでも変わらない、お好みで
+/*
+  SegTree(n) =>  N個の要素を作る
+  SegTree(n, init) => N個の数値initの要素を作る
+  SegTree(vec) =>  vectorをSegTreeに変換する
+  update(a, b, x) => 区間[a, b) の要素をxに更新
+  add(a, b, x) => 区間[a, b)の要素にxを加える
+  query(a, b) => 区間[a, b)の最小値を取得
+  getsum(a, b) => 区間[a, b)の総和を取得
+  SegTree[i] => i番目の要素を出力
+  print() => 全要素を表示
+*/
+template <typename T>
+struct SegTree {
+  // その型での最大値
+  const T INF = numeric_limites<T>::max();
+
+ private:
+  int N;
+  vector<T> nodes, lazy, lazy_add;
+
+ public:
+  // N + (N - 1) 個の葉で初期化
+  // コンストラクタはintとvectorに両方対応
+  SegTree(int n) {
+    int x = 1;
+    while (n > x) x *= 2;
+    n = x;
+    nodes.resize(2 * n - 1, INF);
+    lazy.resize(2 * n - 1, INF);
+    lazy_add.resize(2 * n - 1, INF);
+  }
+
+  SegTree(int n, T init){
+    int x = 1;
+    while(n > x) x *= 2;
+    n = x;
+    nodes.resize(2 * n - 1, init);
+    lazy.resize(2 * n - 1, INF);
+    lazy_add.resize(2 * n - 1, INF);
+  }
+
+  SegTree(vector<T> v) {
+    int sz = v.size();
+    N = 1;
+    while (N < sz) N *= 2;
+    nodes.resize(2 * N - 1, INF);
+    lazy.resize(2 * N - 1, INF);
+    lazy_add.resize(2 * N - 1, 0);
+    for (int i = 0; i < sz; i++) nodes[i + N - 1] = v[i];
+    for (int i = N - 2; i >= 0; i--)
+      nodes[i] = min(nodes[2 * i + 1], nodes[2 * i + 2]);
+  }
+
+  // 遅延評価（更新)
+  void eval(int k) {
+    // 念のための確認、こうなることはほぼない
+    if (lazy[k] == INF) return;
+    // 伝播させる
+    if (k < N - 1) {
+      lazy[2 * k + 1] = lazy[k];
+      lazy[2 * k + 2] = lazy[k];
+    }
+  }
+
+  // 区間加算
+  void eval_add(int k, int l, int r) {
+    if (lazy_add[k] != 0) {
+      nodes[k] += lazy_add[k];
+
+      // 子は親の半分の範囲なので伝播させる時は半分に
+      if (r - l > 1) {
+        lazy_add[2 * k + 1] += lazy_add[k] / 2;
+        lazy_add[2 * k + 2] += lazy_add[k] / 2;
+      }
+      lazy_add[k] = 0;
+    }
+  }
+
+  void add(int a, int b, T x, int k = 0, int l = 0, int r = -1) {
+    if (r < 0) r = N;
+    eval_add(k, l, r);
+    if (b <= l || r <= a) return;
+    // 範囲をまとめたやつに合計値を加えた後、遅延させる
+    // 要は完全に内側の時
+    if (a <= l && r <= b) {
+      lazy_add[k] += (r - l) * x;
+      eval_add(k, l, r);
+    }
+    // 一部区間が被る時
+    else if (a < r && l < b) {
+      add(a, b, x, 2 * k + 1, l, (l + r) / 2);
+      add(a, b, x, 2 * k * 2, (l + r) / 2, r);
+      nodes[k] = nodes[2 * k + 1] + nodes[2 * k + 2];
+    }
+  }
+  void add(int a, int b, int x);
+
+  T getsum(int a, int b, int k = 0, int l = 0, int r = -1) {
+    if (r < 0) r = N;
+    eval_add(k, l, r);
+    if (b <= l || r <= a) return 0;
+    if (a <= l && r <= b) return nodes[k];
+    T vl = getsum(a, b, 2 * k + 1, l, (l + r) / 2);
+    T vr = getsum(a, b, 2 * k + 2, (l + r) / 2, r);
+    return vl + vr;
+  }
+  T getsum(int a, int b) { return getsum(a, b, 0, 0, N); }
+
+  // [a, b)の区間最小の取得
+  T query_sub(int a, int b, int k = 0, int l = 0, int r = -1) {
+    eval(k);
+    // 区間の外 => 無限を返す(返り値にならない)
+    // 全部右側にはみ出してるのと全部左側にはみ出してるの
+    if (r <= a || b <= l) return INF;
+    // 区間内 => 葉の値を返す
+    if (a <= l && r <= b) return nodes[k];
+
+    // 左側の子、右側の子の探索
+    // 要は左側か右側がはみ出してるからそれらを縮めて範囲に近づけてる
+    T vl = query_sub(a, b, 2 * k + 1, l, (l + r) / 2);
+    T vr = query_sub(a, b, 2 * k + 2, (l + r) / 2, r);
+    return min(vl, vr);
+  }
+
+  T query(int a, int b) { return query_sub(a, b, 0, 0, N); }
+
+  // 区間更新
+  void update(int a, int b, int x, int k, int l, int r) {
+    eval(k);
+    // 完全に内側の時
+    if (a <= l && r <= b) {
+      lazy[k] = x;
+      eval(k);
+      // 一部区間が被る時
+    } else if (a < r && l < b) {
+      update(a, b, x, 2 * k + 1, l, (l + r) / 2);
+      update(a, b, x, 2 * k + 2, (l + r) / 2, r);
+      nodes[k] = min(nodes[2 * k + 1], nodes[2 * k * 2]);
+    }
+  }
+
+  void update(int a, int b, int x) { return update(a, b, x, 0, 0, N); }
+
+  // デバッグ用関数
+  /* debug */
+  inline T operator[](int a) { return query(a, a + 1); }
+  void print() {
+    for (int i = 0; i < 2 * N - 1; ++i) {
+      cout << (*this)[i];
+      if (i != N) cout << ",";
+    }
+    cout << endl;
+  }
