@@ -42,9 +42,9 @@ N = 63435, i=2のときの一例である 63○○○ について考える, 3�
 つまり、以下のようなDPを考える
   dp[ i ][smaller][ j ] := i 桁目までの各桁の数の和が mod Dで j となる数。ただし smaller が true ならNより小さい場合を考え、smallerが false ならNと同じ場合を考える。
 
-基本は以下の全ての場合を考えればOKです。
-  dp[ i ][true] からはdp[ i+1 ][ture]にのみ遷移
-  dp[ i ][false] からdp[ i+1 ][ture]へ遷移
+基本は以下の全ての場合を考えればOK。
+  dp[ i ][true] からはdp[ i+1 ][true]にのみ遷移
+  dp[ i ][false] からdp[ i+1 ][true]へ遷移
   dp[ i ][false] からdp[ i+1 ][false]へ遷移
 今回は dp[ i ][smaller][ j ] について考えるので、これを少し変形して、
   dp[i + 1][true] [(j + k) % D]   += dp[i][true] [j] (k = 0,1,2,…,9)

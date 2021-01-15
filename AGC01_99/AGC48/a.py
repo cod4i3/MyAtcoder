@@ -1,21 +1,29 @@
 T = int(input())
 A = "atcoder"
-ans = []
+ans = [0] * T
+S = [input() for i in range(T)]
 for i in range(T):
-  S = input()
-  if(str(list(S).sort) >= A):
-    ans.append(-1)
+  if(S[i].count('a') == len(S[i])): 
+    ans[i] = -1
     continue
-  if(S >= A):
-    ans.append(0)
-    continue
-  cnt = 0
-  for i in range(min(len(A), len(S))):
-    if(A[i] == S[i]): continue
-    for j in range(i, len(S)):
-      cnt += S.find(A[i]) - i
-      S = S[:i] + A[i] + S[i+1:]
-    
-  ans.append(cnt)
-  print(cnt, ans)
-print(ans)
+  if(S[i] > A): continue
+  for j in range(0, len(S[i])):
+    if(S[i][j] != 'a'):
+      s = list(S[i])
+      res = []
+      res.append(s[0])
+      res.append(s[j])
+      s.pop(j)
+      s.pop(0)
+      res += s
+      S[i] = ''.join(res)
+      if(S[i] > A): 
+        ans[i] = max(j - 1, 0)
+        break
+      else: 
+        ans[i] = j
+        break
+      
+
+for i in range(T):
+  print(ans[i])

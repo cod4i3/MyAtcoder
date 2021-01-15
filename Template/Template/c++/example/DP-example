@@ -13,7 +13,7 @@ ll solve(string str) {
   int l = dig.size();
 
   // dp[i][smaller][flag]
-  // i桁目まで、小さいかどうかのflag、4または9を含んでいるかどうかのflag
+  // i桁目まで、smallerは小さいかどうかのflag、4または9を含んでいるかどうかのflag
   // 0桁目は数字"X"を"0X"として考えたときの0
   vector<vector<vector<ll>>> dp(20, vector<vector<ll>>(2, vector<ll>(2, 0)));
   dp[0][0][0] = 1;

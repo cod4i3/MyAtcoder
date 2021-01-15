@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 using ll = long long;
-const int mod = 1000000007;
+ll mod = 1000000007;
 
 struct mint {
   ll x;  // typedef long long ll;
@@ -73,12 +73,7 @@ struct mint {
   }
 };
 
-
 struct combination {
-  /*
-     fact: iの階乗のMOD
-     ifact: factの逆元
-  */
   vector<mint> fact, ifact;
   combination(int n) : fact(n + 1), ifact(n + 1) {
     assert(n < mod);
@@ -96,4 +91,47 @@ struct combination {
 istream& operator>>(istream& is, const mint& a) { return is >> a.x; }
 ostream& operator<<(ostream& os, const mint& a) { return os << a.x; }
 
-// cin >> a.x のように念の為.xをつけておくこと
+long long extGCD(long long a, long long b, long long& x, long long& y) {
+  if (b == 0) {
+    x = 1;
+    y = 0;
+    return a;
+  }
+  long long d = extGCD(b, a % b, y, x);
+  y -= a / b * x;
+  return d;
+}
+
+int main() {
+  ll T;
+  cin >> T;
+  vector<ll> ans(T, 0);
+  for (int i = 0; i < T; i++) {
+    ll N, S, K;
+    cin >> N >> S >> K;
+    mod = N;
+    if (N % K == 0) {
+      if ((N - S) % K) {
+        ans[i] = -1;
+        continue;
+      }
+    }
+
+    if((N - S) % K == 0){
+      ans[i] = (N - S) / K;
+      continue;
+    }
+    ll a = K;
+    ll b = S - K;
+    ll x, y;
+    extGCD(K, S - N, x, y);
+    ans[i] = x;
+    ans[i] *= N;
+
+    cout <<"a, b = " << K << " " << (S - N) << " x, y =    " << x << " " << y << endl;
+    
+  }
+
+  for (int i = 0; i < T; i++) cout << ans[i] << endl;
+  return 0;
+}

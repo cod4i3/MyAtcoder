@@ -1,0 +1,33 @@
+/*
+    ax + by = 1
+      b = qa + rとすると
+    ax + (qa + r)y = 1
+  ⇔ ry + a(x + qy) = 1
+      再び x' = y, y' = (x + qy)
+      　　 a' = r = b % a, b' = a  と置くと
+    a'x' + b'y' = 1
+*/
+
+long long ex_gcd(long long a, long long b, long long &x, long long &y){
+  if(b == 0){
+    x = 1, y = 0;
+    return a;
+  }
+  long long d = ex_gcd(b, a % b, y, x);
+  y -= a / b * x;
+  return d;
+}
+
+long long mod(long long a, long long m){
+  return (a % m + m) % m;
+}
+
+# ax ≡ c(mod m)を求める場合
+  ax + my ≡ c と同値であるため、これの前にgcd(a, m, c)を使う
+  次に 
+  ax + by = cが整数解を持つ条件が c = gcd(a, b)であるため、
+long long modinv(long long a, long long m){
+  long long x, y;
+  ex_gcd(a, m, x, y);
+  return (a % m + m) % m;
+}
